@@ -20,7 +20,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apps
-import androidx.compose.material.icons.filled.Build as BuildIcon
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.HealthAndSafety
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -214,7 +214,7 @@ private enum class Dest(
 ) {
     Suite(R.string.nav_suite, R.string.cd_nav_suite, R.string.title_suite, Icons.Filled.Apps),
     Sweep(R.string.nav_sweep, R.string.cd_nav_sweep, R.string.title_sweep, Icons.Filled.HealthAndSafety),
-    Tools(R.string.nav_tools, R.string.cd_nav_tools, R.string.title_tools, BuildIcon),
+    Tools(R.string.nav_tools, R.string.cd_nav_tools, R.string.title_tools, Icons.Filled.Settings),
 }
 
 /**
