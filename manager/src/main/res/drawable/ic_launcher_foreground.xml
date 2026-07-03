@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Manager: a control-center grid of four rounded tiles. Plain vector. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Top-left tile -->
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M34,32 h14 a4,4 0 0 1 4,4 v14 a4,4 0 0 1 -4,4 h-14 a4,4 0 0 1 -4,-4 v-14 a4,4 0 0 1 4,-4 Z" />
+    <!-- Top-right tile -->
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M60,32 h14 a4,4 0 0 1 4,4 v14 a4,4 0 0 1 -4,4 h-14 a4,4 0 0 1 -4,-4 v-14 a4,4 0 0 1 4,-4 Z" />
+    <!-- Bottom-left tile -->
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M34,58 h14 a4,4 0 0 1 4,4 v14 a4,4 0 0 1 -4,4 h-14 a4,4 0 0 1 -4,-4 v-14 a4,4 0 0 1 4,-4 Z" />
+    <!-- Bottom-right tile (accent-dim, the "active" tile) -->
+    <path
+        android:strokeColor="#E0E0E0"
+        android:strokeWidth="4"
+        android:fillColor="#00000000"
+        android:pathData="M60,58 h14 a4,4 0 0 1 4,4 v14 a4,4 0 0 1 -4,4 h-14 a4,4 0 0 1 -4,-4 v-14 a4,4 0 0 1 4,-4 Z" />
+</vector>

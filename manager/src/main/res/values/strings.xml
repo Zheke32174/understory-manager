@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  App-specific copy for Understory Manager. Shared common-security strings
+  (cd_*, state_*, action_*, msg_*) live in common-security/res/values/strings.xml.
+  Keep copy HONEST: the Manager is OPTIONAL; every suite app works standalone.
+  It orchestrates + reminds; it never reads a peer's vault cross-UID and never
+  claims data it cannot see.
+-->
+<resources>
+    <string name="app_name">Understory Manager</string>
+
+    <!-- Bottom navigation destinations -->
+    <string name="nav_suite">Suite</string>
+    <string name="nav_sweep">Sweep</string>
+    <string name="nav_tools">Tools</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_nav_suite">Suite dashboard</string>
+    <string name="cd_nav_sweep">Security sweep</string>
+    <string name="cd_nav_tools">Tools: elevation and recovery</string>
+    <string name="cd_diagnostics">Open diagnostics (engineering build)</string>
+
+    <!-- Section titles -->
+    <string name="title_suite">Your suite</string>
+    <string name="title_sweep">Security sweep</string>
+    <string name="title_tools">Tools</string>
+
+    <!-- Startup crash fallback -->
+    <string name="crash_title">Manager crash</string>
+    <string name="crash_reason">Something went wrong starting the app.</string>
+
+    <!-- Tamper block (suite attestation hard-fail) -->
+    <string name="tamper_block_title">Manager can\'t run safely</string>
+    <string name="tamper_block_reason">A suite app on this device has an unexpected signature (%1$s), so the suite can\'t be trusted. Reinstall the affected app from a trusted source.</string>
+    <string name="tamper_block_close">Close</string>
+</resources>

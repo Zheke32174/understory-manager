@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+      Suite capability registry permission. ONE shared signature-level
+      name declared identically in every suite app (first-installed
+      definition wins by Android semantics; identical same-cert
+      declarations keep that safe). The Manager REQUESTS the read
+      permission (uses-permission) so it can read each installed peer's
+      signature-gated SuiteCapsProvider — it is signed with the same suite
+      key, so the signature check passes and it can show a verified /
+      capability chip per peer.
+
+      The Manager is a CONSUMER: it does NOT expose a SuiteCapsProvider of
+      its own (it offers no peer-invocable capability). CAPS_WRITE is
+      declared for name-parity with the suite but requested by no app — a
+      permanently locked write gate.
+    -->
+    <permission
+        android:name="com.understory.suite.CAPS"
+        android:protectionLevel="signature" />
+    <permission
+        android:name="com.understory.suite.CAPS_WRITE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.understory.suite.CAPS" />
+
+    <!--
+      OPTIONAL elevation (see :elevation). The suite is rootless by default; this
+      permission is what the Shizuku manager checks when the Manager's Elevation
+      Center requests access. It grants nothing on its own — no privileged action
+      runs unless the user has installed Shizuku AND explicitly granted this app.
+      The Manager only uses it for a couple of suite-wide conveniences it can do
+      itself (e.g. Apply Private DNS); each specialist app still manages its own
+      Shizuku grant. The Dhizuku half (its API permission + <queries> block) is
+      merged automatically from the Dhizuku-API AAR when that tier is compiled in,
+      so no per-app copy is needed here.
+    -->
+    <uses-permission android:name="moe.shizuku.manager.permission.API_V23" />
+
+    <!--
+      Manager permission posture: like antivirus/firewall, the control center
+      legitimately needs QUERY_ALL_PACKAGES — its dashboard enumerates which
+      suite apps are installed and their versions, counts installed non-system
+      apps for the security sweep, and enumerates which apps currently hold
+      accessibility / device-admin / notification-listener slots (all readable
+      rootless; the Manager holds none of those slots itself). The <queries>
+      block below covers the seven suite packages for detect + launch even if
+      QUERY_ALL_PACKAGES were ever dropped.
+
+      Explicitly NOT requesting:
+        - INTERNET: there is NO network path at all. The Manager reads local
+          device posture and orchestrates the installed suite apps; it never
+          syncs, fetches, or phones home.
+        - ACCESSIBILITY / device-admin / notification-listener BINDs: the
+          Manager only ENUMERATES others' holdings (readable rootless) — it
+          never holds any of those slots itself.
+        - READ_MEDIA_* / storage: the Manager reads no user files; it reminds
+          the user to export each vault app's recovery file and deep-links to
+          that app (never reads a vault cross-UID).
+    -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <!--
+      Notifications: POST_NOTIFICATIONS is declared normally (NOT stripped).
+      It is not a scarce slot and is opt-in at runtime. The Manager ships no
+      background worker; this is declared so a future opt-in reminder can post,
+      and its absence never disables any in-app function.
+    -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- IP / general networking -->
+    <uses-permission android:name="android.permission.INTERNET" tools:node="remove" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" tools:node="remove" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" tools:node="remove" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" tools:node="remove" />
+    <!-- SMS / MMS -->
+    <uses-permission android:name="android.permission.SEND_SMS" tools:node="remove" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_SMS" tools:node="remove" />
+    <uses-permission android:name="android.permission.WRITE_SMS" tools:node="remove" />
+    <uses-permission android:name="android.permission.RECEIVE_MMS" tools:node="remove" />
+    <uses-permission android:name="android.permission.RECEIVE_WAP_PUSH" tools:node="remove" />
+    <!-- Cellular / telephony -->
+    <uses-permission android:name="android.permission.CALL_PHONE" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_PRECISE_PHONE_STATE" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" tools:node="remove" />
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG" tools:node="remove" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" tools:node="remove" />
+    <!-- Satellite -->
+    <uses-permission android:name="android.permission.SATELLITE_COMMUNICATION" tools:node="remove" />
+    <!-- Bluetooth -->
+    <uses-permission android:name="android.permission.BLUETOOTH" tools:node="remove" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" tools:node="remove" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" tools:node="remove" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" tools:node="remove" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" tools:node="remove" />
+    <!-- NFC -->
+    <uses-permission android:name="android.permission.NFC" tools:node="remove" />
+    <uses-permission android:name="android.permission.NFC_TRANSACTION_EVENT" tools:node="remove" />
+    <!-- Location -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" tools:node="remove" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" tools:node="remove" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" tools:node="remove" />
+    <!-- Audio -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" tools:node="remove" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" tools:node="remove" />
+    <uses-permission android:name="android.permission.CAPTURE_AUDIO_OUTPUT" tools:node="remove" />
+    <uses-permission android:name="android.permission.CAPTURE_AUDIO_HOTWORD" tools:node="remove" />
+    <uses-permission android:name="android.permission.CAPTURE_MEDIA_OUTPUT" tools:node="remove" />
+    <uses-permission android:name="android.permission.CAPTURE_VOICE_COMMUNICATION_OUTPUT" tools:node="remove" />
+    <uses-permission android:name="android.permission.BIND_VOICE_INTERACTION" tools:node="remove" />
+    <uses-permission android:name="android.permission.BIND_TEXT_SERVICE" tools:node="remove" />
+    <!-- Camera -->
+    <uses-permission android:name="android.permission.CAMERA" tools:node="remove" />
+    <uses-permission android:name="android.permission.BACKGROUND_CAMERA" tools:node="remove" />
+    <uses-permission android:name="android.permission.SYSTEM_CAMERA" tools:node="remove" />
+    <!-- Biometrics -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" tools:node="remove" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" tools:node="remove" />
+    <!-- Storage / media -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:node="remove" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="remove" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" tools:node="remove" />
+    <!-- Overlays -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" tools:node="remove" />
+    <!-- Package install/delete — the Manager only inspects + deep-links, never modifies. -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" tools:node="remove" />
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" tools:node="remove" />
+    <!-- Service binds — explicitly NO accessibility / admin / listener. -->
+    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" tools:node="remove" />
+    <uses-permission android:name="android.permission.BIND_DEVICE_ADMIN" tools:node="remove" />
+    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" tools:node="remove" />
+    <uses-permission android:name="android.permission.BIND_QUICK_SETTINGS_TILE" tools:node="remove" />
+    <!-- Sensors -->
+    <uses-permission android:name="android.permission.BODY_SENSORS" tools:node="remove" />
+    <uses-permission android:name="android.permission.BODY_SENSORS_BACKGROUND" tools:node="remove" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" tools:node="remove" />
+    <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS" tools:node="remove" />
+    <!-- VoIP -->
+    <uses-permission android:name="android.permission.USE_SIP" tools:node="remove" />
+    <!-- Other -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" tools:node="remove" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" tools:node="remove" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" tools:node="remove" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" tools:node="remove" />
+
+    <!--
+      Suite peers the Manager detects + launches. QUERY_ALL_PACKAGES already
+      grants visibility, but these explicit <queries> entries keep detect/launch
+      working even if that permission were dropped, and document the exact suite
+      surface the control center orchestrates.
+    -->
+    <queries>
+        <package android:name="com.understory.passgen" />
+        <package android:name="com.understory.aegis" />
+        <package android:name="com.understory.firewall" />
+        <package android:name="com.understory.backups" />
+        <package android:name="com.understory.browser" />
+        <package android:name="com.understory.vaultfolder" />
+        <package android:name="com.understory.antivirus" />
+    </queries>
+
+    <application
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:theme="@style/Theme.Manager"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="false"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:usesCleartextTraffic="false"
+        android:supportsRtl="true">
+
+        <!--
+          Activity-isolation set relaxed for the testing phase, matching the
+          rest of the suite.
+        -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:resizeableActivity="false"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden|uiMode"
+            android:theme="@style/Theme.Manager">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+          OPTIONAL elevation: Shizuku hands this app a binder through this
+          provider. Declared per :elevation's README. It is inert unless Shizuku
+          is installed and the user grants access; the shell UserService the
+          broker binds ships inside :elevation (instantiated across the process
+          boundary by name, not declared here) and is kept from R8 stripping by
+          :elevation's consumer-rules.pro.
+        -->
+        <provider
+            android:name="rikka.shizuku.ShizukuProvider"
+            android:authorities="${applicationId}.shizuku"
+            android:multiprocess="false"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
+
+    </application>
+
+</manifest>
