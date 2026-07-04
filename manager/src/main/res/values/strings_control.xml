@@ -74,4 +74,5 @@
     <string name="control_result_success">Done: %1$s</string>
     <string name="control_result_unsupported">Not applied: %1$s</string>
     <string name="control_result_failed">Failed: %1$s</string>
+    <string name="action_cancel">Cancel</string>
 </resources>
