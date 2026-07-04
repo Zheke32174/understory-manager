@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  User-facing copy for the Manager's Control center (the elevated action surface).
+  Shared common-security strings (cd_*, state_*, action_*, msg_*) live in
+  common-security/res/values/strings.xml; the Manager's other app copy lives in
+  strings.xml. Everything here is OPT-IN and fail-closed: when no Shizuku shell is
+  granted, controls degrade to honest copy that routes to the grant flow — never a
+  dead button. Copy never claims a fabricated success and never renders a secret.
+-->
+<resources>
+    <!-- Bottom-nav destination -->
+    <string name="nav_control">Control</string>
+    <string name="cd_nav_control">Control center: elevated actions</string>
+    <string name="title_control">Control center</string>
+
+    <!-- Control center hub -->
+    <string name="control_intro">The Control center performs the elevated actions the Manager can do itself when you grant it Shizuku. Everything here is optional and reversible-first: it suspends rather than uninstalls, and every appops or permission change can be undone. Nothing here runs unless you have granted a privileged shell.</string>
+    <string name="control_locked_title">Control needs a privileged shell</string>
+    <string name="control_locked_body">These actions run through the Shizuku shell you optionally grant the Manager. Grant it in the Elevation center (Tools tab) and these controls light up. Until then they stay off — the Manager never fakes a privileged action.</string>
+    <string name="control_open_elevation">Open Elevation center</string>
+    <string name="control_shell_ready">Shizuku shell granted — the actions below are live.</string>
+
+    <!-- Section: Panic lockdown -->
+    <string name="control_panic_title">Panic lockdown</string>
+    <string name="control_panic_desc">Suspend a set of installed apps at once (greyed out, cannot launch). This is reversible: un-suspend the same set with one tap. Suite apps, your launcher, Settings, Tailscale, and the Shizuku manager are always excluded — they are never suspended.</string>
+    <string name="control_panic_open">Open panic lockdown</string>
+    <string name="control_panic_pick_title">Choose apps to suspend</string>
+    <string name="control_panic_pick_body">Tick the apps to lock down. Excluded system, suite, and connectivity apps are not shown. Suspending is fully reversible.</string>
+    <string name="control_panic_forcestop">Also force-stop each app when suspending</string>
+    <string name="control_panic_suspend">Suspend selected</string>
+    <string name="control_panic_unsuspend">Un-suspend the locked set</string>
+    <string name="control_panic_none_selected">Select at least one app to lock down.</string>
+    <string name="control_panic_locked_header">Currently locked down</string>
+    <string name="control_panic_locked_empty">Nothing is locked down right now.</string>
+    <string name="control_panic_locked_count">%1$d app(s) locked down. They stay saved here so you can restore them even after relaunch.</string>
+    <string name="control_panic_empty_list">No eligible apps to lock down were found.</string>
+
+    <!-- Section: Grant review -->
+    <string name="control_grant_title">Grant review</string>
+    <string name="control_grant_desc">Pick an installed app to review its sensitive grants — overlay, camera, microphone, location, usage access, and dangerous runtime permissions. Revoke a permission or set an appop to ignore in one tap, with undo. Accessibility and device-admin are handled in system Settings.</string>
+    <string name="control_grant_open">Open grant review</string>
+    <string name="control_grant_pick">Choose an app to review</string>
+    <string name="control_grant_reading">Reading grants…</string>
+    <string name="control_grant_degraded">A privileged read was not available, so this shows the rootless permission view from the package manager. Grant Shizuku for the deeper appops read.</string>
+    <string name="control_grant_none">No sensitive grants were detected for this app.</string>
+    <string name="control_grant_revoke">Revoke</string>
+    <string name="control_grant_ignore">Set to ignore</string>
+    <string name="control_grant_undo">Undo</string>
+    <string name="control_grant_a11y_settings">Review in accessibility settings</string>
+    <string name="control_grant_admin_settings">Review in device-admin settings</string>
+    <string name="control_grant_a11y_note">This app holds an accessibility service. Accessibility is system-gated — review and turn it off in Settings.</string>
+    <string name="control_grant_admin_note">This app is an active device administrator. Remove device-admin in Settings before it can be uninstalled.</string>
+
+    <!-- Section: Private DNS strict -->
+    <string name="control_dns_title">Private DNS (Strict)</string>
+    <string name="control_dns_desc">Force DNS-over-TLS to a specific host across the whole device. This complements the Automatic/Off buttons in the Elevation center. The Manager reads the live Private DNS state back so you see exactly what was applied.</string>
+    <string name="control_dns_hostname_label">DNS-over-TLS hostname</string>
+    <string name="control_dns_hostname_hint">e.g. dns.example.com</string>
+    <string name="control_dns_apply">Apply strict Private DNS</string>
+    <string name="control_dns_need_host">Enter a hostname to apply strict Private DNS.</string>
+    <string name="control_dns_current">Current Private DNS: %1$s</string>
+    <string name="control_dns_current_unknown">Current Private DNS state could not be read.</string>
+    <string name="control_dns_refresh">Re-read current state</string>
+
+    <!-- Section: Deep posture read -->
+    <string name="control_posture_title">Deep posture read</string>
+    <string name="control_posture_desc">Enrich the rootless sweep with a few extra reads from the privileged shell: doze/idle state, overlay and usage-access appops, background-network restrictions, and lock-screen settings. These are additive — if a read is unavailable it is simply skipped.</string>
+    <string name="control_posture_run">Run deep posture read</string>
+    <string name="control_posture_rerun">Re-run deep posture read</string>
+    <string name="control_posture_running">Reading extended posture…</string>
+    <string name="control_posture_empty">No extra posture rows were available from the privileged shell.</string>
+
+    <!-- Generic result copy -->
+    <string name="control_result_success">Done: %1$s</string>
+    <string name="control_result_unsupported">Not applied: %1$s</string>
+    <string name="control_result_failed">Failed: %1$s</string>
+</resources>

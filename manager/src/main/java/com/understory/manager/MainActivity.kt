@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.HealthAndSafety
+import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -56,6 +57,7 @@ import com.understory.elevation.Outcome
 import com.understory.elevation.PrivateDnsMode
 import com.understory.elevation.ui.ElevationCard
 import com.understory.elevation.ui.rememberElevationState
+import com.understory.manager.control.ControlCenterScreen
 import com.understory.security.Diagnostics
 import com.understory.security.DiagnosticsDump
 import com.understory.security.DiagnosticsScreen
@@ -214,6 +216,7 @@ private enum class Dest(
 ) {
     Suite(R.string.nav_suite, R.string.cd_nav_suite, R.string.title_suite, Icons.Filled.Apps),
     Sweep(R.string.nav_sweep, R.string.cd_nav_sweep, R.string.title_sweep, Icons.Filled.HealthAndSafety),
+    Control(R.string.nav_control, R.string.cd_nav_control, R.string.title_control, Icons.Filled.Shield),
     Tools(R.string.nav_tools, R.string.cd_nav_tools, R.string.title_tools, Icons.Filled.Settings),
 }
 
@@ -302,6 +305,7 @@ private fun ManagerApp() {
         when (dest) {
             Dest.Suite -> SuiteSection(pad)
             Dest.Sweep -> SweepSection(pad)
+            Dest.Control -> ControlSection(pad, onOpenElevation = { destName = Dest.Tools.name })
             Dest.Tools -> ToolsSection(pad)
         }
     }
@@ -459,6 +463,29 @@ private fun deepLinkLabel(target: DevicePosture.PostureDeepLink): String = when 
     DevicePosture.PostureDeepLink.APK_CHECK -> "Open APK Check"
     DevicePosture.PostureDeepLink.NET_AUDIT -> "Open Net Audit"
     DevicePosture.PostureDeepLink.ACCESSIBILITY_SETTINGS -> "Open accessibility settings"
+}
+
+// ------------------------------------------------------------------
+// Control — the elevated action center (fail-closed, opt-in).
+// ------------------------------------------------------------------
+
+/**
+ * The "Control" destination: the Manager's elevated action center. It is uniformly
+ * fail-closed — [ControlCenterScreen] renders the four actions (panic lockdown, grant
+ * review, strict Private DNS, deep posture read) only when a privileged shell can run,
+ * and otherwise shows an honest card routing to the Elevation center via
+ * [onOpenElevation]. System-gated surfaces (accessibility, device-admin) deep-link to
+ * Settings rather than offering a dead toggle.
+ */
+@Composable
+private fun ControlSection(pad: PaddingValues, onOpenElevation: () -> Unit) {
+    val ctx = LocalContext.current
+    ControlCenterScreen(
+        pad = pad,
+        onOpenElevation = onOpenElevation,
+        onOpenAccessibilitySettings = { ManagerDeepLinks.openAccessibilitySettings(ctx) },
+        onOpenDeviceAdminSettings = { ManagerDeepLinks.openDeviceAdminSettings(ctx) },
+    )
 }
 
 // ------------------------------------------------------------------

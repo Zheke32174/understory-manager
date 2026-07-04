@@ -84,6 +84,22 @@ object ManagerDeepLinks {
     fun openPrivateDnsSettings(ctx: Context): Boolean =
         launchFirst(ctx, listOf(privateDnsSettingsAction(), Settings.ACTION_WIRELESS_SETTINGS, Settings.ACTION_SETTINGS))
 
+    /**
+     * Open the system accessibility settings so the user can review/turn off an app's
+     * accessibility service. Accessibility is system-gated — the Manager routes to it
+     * rather than offering a (nonexistent) direct toggle. Never a dead end.
+     */
+    fun openAccessibilitySettings(ctx: Context): Boolean =
+        launchFirst(ctx, listOf(Settings.ACTION_ACCESSIBILITY_SETTINGS, Settings.ACTION_SETTINGS))
+
+    /**
+     * Open the system security / device-admin settings so the user can remove an active
+     * device-admin (which blocks uninstall). ACTION_SECURITY_SETTINGS hosts the device
+     * administrators list on AOSP; fall back to the top-level Settings. Never a dead end.
+     */
+    fun openDeviceAdminSettings(ctx: Context): Boolean =
+        launchFirst(ctx, listOf(Settings.ACTION_SECURITY_SETTINGS, Settings.ACTION_SETTINGS))
+
     // ---- internals ----------------------------------------------------------
 
     /**
