@@ -88,11 +88,9 @@ import kotlinx.coroutines.withContext
  * peer's data cross-UID, never renders a secret, and degrades honestly to
  * exactly what is installed. Every suite app works standalone without it.
  *
- * Accent: the Manager reuses [UnderstoryAccent.AEGIS]'s calm blue seed — there
- * is no dedicated Manager accent value in the (byte-identical, vendored)
- * common-security theme, and adding one would fork the shared source of truth.
- * The blue reads as a neutral control-center tone, distinct from the antivirus
- * teal, so the Manager still sits inside the suite family.
+ * Accent: the Manager owns [UnderstoryAccent.MANAGER] — electric teal, the
+ * control-plane authority hue in the Aurora palette, distinct from every other
+ * suite app so the control center reads as the hub of the constellation.
  */
 class MainActivity : ComponentActivity() {
 
@@ -136,7 +134,7 @@ class MainActivity : ComponentActivity() {
         tamperBlockReason = hardBlockReason
 
         setContent {
-            UnderstoryTheme(accent = UnderstoryAccent.AEGIS) {
+            UnderstoryTheme(accent = UnderstoryAccent.MANAGER) {
                 val reason = tamperBlockReason
                 if (reason != null) {
                     TamperBlockScreen(reason = reason, onClose = { finishAndRemoveTask() })
@@ -156,7 +154,7 @@ class MainActivity : ComponentActivity() {
         } catch (t: Throwable) {
             Diagnostics.error("manager.MainActivity", "onCreate threw: ${t.javaClass.simpleName}: ${t.message}")
             setContent {
-                UnderstoryTheme(accent = UnderstoryAccent.AEGIS) {
+                UnderstoryTheme(accent = UnderstoryAccent.MANAGER) {
                     FatalScreen(
                         title = getString(R.string.crash_title),
                         reason = getString(R.string.crash_reason),
