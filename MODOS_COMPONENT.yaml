@@ -1,0 +1,63 @@
+apiVersion: modos.pleiades/v1alpha1
+kind: Component
+metadata:
+  name: understory-manager
+  repository: Zheke32174/understory-manager
+  visibility: public
+  lifecycle: experimental
+  defaultBranch: main
+spec:
+  roles:
+    - android-suite-control-surface
+    - sibling-signature-verifier
+    - rootless-device-posture-summary
+    - recovery-export-reminder
+  authority: local-orchestration
+  authorityConditions:
+    - every-suite-app-remains-fully-standalone
+    - sibling-data-access-is-limited-to-signature-gated-capability-metadata
+    - optional-elevation-applies-only-to-manager-owned-actions
+    - recovery-center-never-reads-or-renders-sibling-secrets
+  inputs:
+    - installed-package-metadata
+    - sibling-signing-certificates
+    - signature-gated-suite-capabilities
+    - local-device-posture
+    - explicit-local-steward-actions
+  outputs:
+    - suite-installation-view
+    - sibling-authenticity-verdicts
+    - rootless-security-sweep
+    - specialist-app-deep-links
+    - recovery-export-reminders
+    - manager-owned-private-dns-request-when-locally-elevated
+  capabilitiesProvided:
+    - suite.android.discover
+    - suite.android.signature.verify
+    - suite.android.capability.read
+    - posture.android.summarize.local
+    - recovery.android.remind
+  capabilitiesRequired:
+    - android.package-query
+    - suite.signature-pins
+    - suite.capability-registry.read
+    - steward.approval.local-elevation
+    - test.android.suite-compatibility
+  dataClasses:
+    - public
+    - internal
+    - private
+    - untrusted
+    - evidence
+  failurePolicy: degrade-to-installed-visible-subset
+  promotionPolicy: evidence-gated
+  policies:
+    - no-fabricated-cross-app-state
+    - no-sibling-vault-content-access
+    - no-recovery-secret-rendering
+    - no-dead-controls-for-unavailable-apps
+    - no-suite-wide-elevation-inheritance
+    - wrong-signature-sibling-is-untrusted
+    - missing-sibling-is-normal-not-failure
+    - suite-apps-remain-independently-operable
+  notes: The Manager is an optional local control surface and authenticity dashboard. It complements rather than replaces specialist applications and cannot acquire their secrets or authority merely because they share a signing lineage.
