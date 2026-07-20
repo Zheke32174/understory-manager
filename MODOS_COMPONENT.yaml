@@ -1,0 +1,57 @@
+apiVersion: modos.pleiades/v1alpha1
+kind: Component
+metadata:
+  name: understory-suite-manager
+  repository: Zheke32174/understory-manager
+  visibility: public
+  lifecycle: experimental
+  defaultBranch: main
+  labels:
+    modos.pleiades/subsystem: application-canopy
+    modos.pleiades/organ-class: suite-control-center
+spec:
+  roles:
+    - optional-suite-dashboard
+    - signature-and-capability-verifier
+    - rootless-device-posture-observer
+    - bounded-elevation-convenience-surface
+    - recovery-reminder-router
+  authority: local-enforcement
+  inputs:
+    - installed-package-metadata
+    - suite-signature-pins
+    - live-capability-provider-results
+    - rootless-device-posture
+    - optional-user-granted-shizuku-session
+  outputs:
+    - verified-suite-inventory
+    - posture-verdicts-and-deep-links
+    - explicit-private-dns-change-intent
+    - recovery-export-reminders
+  capabilitiesProvided:
+    - suite.manager.observe@v1
+    - device.private-dns.apply@v1
+  capabilitiesRequired:
+    - library.mobile.common@v1
+    - identity.android.signature.verify@v1
+  dataClasses:
+    - public
+    - internal
+    - private
+    - untrusted
+  failurePolicy: degrade-local
+  promotionPolicy: evidence-gated
+  relations:
+    - type: depends-on
+      targetRef: repo:Zheke32174/understory-common
+      scope: build
+      required: true
+    - type: subsystem-of
+      targetRef: component:understory-agent-trunk
+      scope: distribution
+      required: true
+  notes: >-
+    The Manager complements rather than replaces standalone suite apps. It may
+    apply Private DNS only after an explicit optional Shizuku grant, cannot read
+    vault data across application UIDs, and must report absent or tampered apps
+    honestly rather than fabricating cross-app state.
